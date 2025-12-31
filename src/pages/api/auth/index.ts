@@ -108,8 +108,13 @@ export const GET: APIRoute = async ({ request, cookies }) => {
         img: getAvatarURL(userData.id, userData.avatar, 128),
       }
     });
-    cookies.set("key", data.access_token, { maxAge: data.expires_in, path: "/" });
-
+    cookies.set("key", data.access_token, { 
+    maxAge: data.expires_in, 
+    path: "/", 
+    httpOnly: true, 
+    secure: true, 
+    sameSite: "lax" 
+});
     const redirect = cookies.get("redirect")?.value;
     cookies.delete("redirect");
     if (redirect) return new Response(null, { status: 302, headers: { Location: new URL(redirect, DOMAIN).toString() } });
